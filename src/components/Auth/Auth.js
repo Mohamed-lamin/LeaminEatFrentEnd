@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react"
-import { GoogleLogin } from "react-google-login"
 import { useDispatch, useSelector } from "react-redux"
 import { useHistory } from "react-router-dom"
 import { signin, signup } from "../../actions/auth"
