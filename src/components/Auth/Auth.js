@@ -165,7 +165,7 @@ function Auth() {
           >
             Enregistrer
           </button>
-          <div id="signInDiv"></div>
+          <div calssName="w-60" id="signInDiv"></div>
         </form>
       </div>
     </div>
