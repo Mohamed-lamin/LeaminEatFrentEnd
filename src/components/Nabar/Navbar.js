@@ -19,9 +19,9 @@ function Navbar() {
   const [offre, setOffre] = useState(false)
   const restaurantinfo = useSelector(state => state.restaurant)
   console.log(restaurantinfo)
-  const restaurantId = user?.result.restaurantUser?._id
+  const restaurantId = user?.restaurantUser?._id
   const [restaurantBar, setRestaurantBar] = useState(
-    JSON.parse(localStorage.getItem("profile"))?.result.restaurantUser
+    JSON.parse(localStorage.getItem("profile"))?.restaurantUser
   )
 
   const logout = () => {
@@ -31,7 +31,7 @@ function Navbar() {
     setUser(null)
     setSettings(false)
   }
-
+  console.log(location)
   useEffect(() => {
     const token = user?.token
     if (token) {
@@ -39,9 +39,10 @@ function Navbar() {
       if (decodeToken.exp * 1000 < new Date().getTime()) logout()
     }
     setUser(JSON.parse(localStorage.getItem("profile")))
-    setRestaurantBar(
-      JSON.parse(localStorage.getItem("profile"))?.result.restaurantUser
-    )
+    console.log(user)
+    // setRestaurantBar(
+    //   JSON.parse(localStorage.getItem("profile"))?.result?.restaurantUser
+    // )
   }, [location])
   const addToPartenaire = () => {
     dispatch(UpdateCatList(restaurantId, { listName: "Séléction" }))
@@ -74,27 +75,27 @@ function Navbar() {
         </div>
 
         <div>
-          {(restaurantBar || restaurantinfo) && (
+          {user && (
             <div className="font-bold flex items-center space-x-2 ">
               <Avatar
                 round={true}
                 size="35"
                 className=" "
                 name={
-                  restaurantBar
-                    ? restaurantBar.restaurant_name
-                    : restaurantinfo?.restaurantUser.restaurant_name
+                  location.pathname === "/restaurantinfo"
+                    ? user.result.name
+                    : user.result.restaurantUser?.restaurant_name
                 }
                 src={
-                  restaurantBar
-                    ? restaurantBar.image
-                    : restaurantinfo.restaurantUser.image
+                  location.pathname === "/restaurantinfo"
+                    ? ""
+                    : user.result.restaurantUser?.image
                 }
               />
               <h1>
-                {restaurantBar
-                  ? restaurantBar.restaurant_name
-                  : restaurantinfo.restaurantUser.restaurant_name}
+                {location.pathname === "/restaurantinfo"
+                  ? user.result.name
+                  : user.result.restaurantUser?.restaurant_name}
               </h1>
 
               <button
@@ -131,11 +132,8 @@ function Navbar() {
             >
               Offres à faire
             </button>
-            <button
-              className="font-bold hover:text-orange-500 hover:underline"
-              onClick={logout}
-            >
-              Deconnecter
+            <button className="font-bold hover:text-orange-500 hover:underline">
+              Modifier votre profile
             </button>
             {/* <button
               className="font-bold hover:text-orange-500 hover:underline"

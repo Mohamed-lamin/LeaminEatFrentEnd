@@ -19,12 +19,10 @@ function RestaurantForm({ restaurantId, setPlatCurrentId, platCurrentId }) {
     description: "",
     image: "",
   })
-  const resetUpdate = () => {
-    setPlatCurrentId(0)
-  }
 
   const user = JSON.parse(localStorage.getItem("profile"))
-  const clear = () => {
+  const clear = e => {
+    e.preventDefault()
     setPlatCurrentId(0)
     setPostData({
       dishname: "",
@@ -112,14 +110,14 @@ function RestaurantForm({ restaurantId, setPlatCurrentId, platCurrentId }) {
           {`${platCurrentId ? "Mettre à jour" : "Enregistrer"}`}
         </button>
 
-        {/* <button
+        <button
           className={`my-1 py-1 border-solid border-2 bg-black w-5/12 ${
             platCurrentId ? "block" : "hidden"
           } text-white font-bold rounded-md`}
-          onClick={resetUpdate}
+          onClick={clear}
         >
           Annuler
-        </button> */}
+        </button>
       </form>
     </div>
   )

@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from "react"
 import { GoogleLogin } from "react-google-login"
-import { useDispatch } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
 import { useHistory } from "react-router-dom"
 import { signin, signup } from "../../actions/auth"
+import jwt_decode from "jwt-decode"
+
 const initialState = {
   firstname: "",
   lastname: "",
@@ -20,7 +22,8 @@ function Auth() {
   //   e.preventDefault()
   //   setIsSignup(!isSignup)
   // }
-
+  const error = useSelector(state => state.auth)
+  console.log(error)
   // handle Change in the form
   const handleChange = e =>
     setForm({ ...form, [e.target.name]: e.target.value })
@@ -36,12 +39,12 @@ function Auth() {
     dispatch(signup(form, history))
   }
   // handle google responses
-  // const googleSuccess = async res => {
-  //   console.log(res)
-  // }
-  // const googleFailure = error => {
-  //   console.log(error)
-  // }
+  const googleSuccess = async res => {
+    console.log(res)
+  }
+  const googleFailure = error => {
+    console.log(error)
+  }
   useEffect(() => {
     let isAuth = JSON.parse(localStorage.getItem("profile"))
     console.log(isAuth)
@@ -53,6 +56,31 @@ function Auth() {
       history.push("/")
     }
   }, [])
+  function handleCallbackResponse(res) {
+    const token = res.credential
+    const result = jwt_decode(res.credential)
+    try {
+      dispatch({ type: "AUTH", data: { result, token } })
+
+      history.push("/plats")
+    } catch (error) {
+      console.log(error)
+    }
+  }
+  useEffect(() => {
+    // eslint-disable-next-line no-undef
+    google.accounts.id.initialize({
+      client_id:
+        "458146796540-v47o5hhr2n9o5h1nu254r5t3or8kd70j.apps.googleusercontent.com",
+      // eslint-disable-next-line no-undef
+      callback: handleCallbackResponse,
+    })
+    // eslint-disable-next-line no-undef
+    google.accounts.id.renderButton(document.getElementById("signInDiv"), {
+      theme: "outline",
+      size: "large",
+    })
+  })
   return (
     <div className="container mx-auto flex flex-col md:flex-row justify-center items-center">
       <div className="mx-10  md:w-1/2">
@@ -78,7 +106,7 @@ function Auth() {
 
           <input
             className="bg-gray-300 mb-2  rounded py-2 px-2 w-60 md:w-80 "
-            placeholder="Votre addresse email"
+            placeholder="Votre adresse email"
             name="email"
             type="email"
             onChange={handleChange}
@@ -94,34 +122,17 @@ function Auth() {
 
           <input
             className="bg-gray-300   rounded py-2 px-2 w-60 md:w-80"
-            placeholder="Répeter mot de passe"
+            placeholder="Confirmer mot de passe"
             name="confirmPassword"
             type="password"
             onChange={handleChange}
           />
 
-          {/* <GoogleLogin
-          clientId="458146796540-d5m8url2koae8v3092divjlvp7qlfbk4.apps.googleusercontent.com"
-          render={renderProps => (
-            <button
-              onClick={renderProps.onClick}
-              disabled={renderProps.disabled}
-              >
-              Google singin
-              </button>
-              )}
-          onSuccess={googleSuccess}
-          onFailure={}
-          cookiePolicy="single_host_origin"
-        /> */}
           <button
             className=" mt-5 w-60 md:w-80 py-0.5 border-solid border-2 bg-black   text-white font-bold rounded-md "
             type="submit"
           >
             S'inscrire
-          </button>
-          <button className=" mt-3 mb-5 w-60  md:w-80 py-0.5 border-solid border-2 bg-black  text-white font-bold rounded-md ">
-            S'inscrire avec Google
           </button>
         </form>
       </div>
@@ -134,7 +145,7 @@ function Auth() {
           <div className="flex flex-col mt-5 ">
             <input
               className="bg-gray-300 mb-2  rounded py-2 px-2 w-60 md:w-80 "
-              placeholder="Votre addresse email"
+              placeholder="Votre adresse email"
               name="email"
               type="email"
               onChange={handleChange}
@@ -149,29 +160,13 @@ function Auth() {
             />
           </div>
 
-          {/* <GoogleLogin
-          clientId="458146796540-d5m8url2koae8v3092divjlvp7qlfbk4.apps.googleusercontent.com"
-          render={renderProps => (
-            <button
-              onClick={renderProps.onClick}
-              disabled={renderProps.disabled}
-              >
-              Google singin
-              </button>
-              )}
-          onSuccess={googleSuccess}
-          onFailure={}
-          cookiePolicy="single_host_origin"
-        /> */}
           <button
             className=" mt-5  w-60 md:w-80 py-0.5 border-solid border-2 bg-black   text-white font-bold rounded-md "
             type="submit"
           >
             Enregistrer
           </button>
-          <button className=" mt-3 mb-5 w-60  md:w-80 py-0.5 border-solid border-2 bg-black  text-white font-bold rounded-md ">
-            S'inscrire avec Google
-          </button>
+          <div id="signInDiv"></div>
         </form>
       </div>
     </div>

@@ -25,7 +25,7 @@ function Restaurantinfo() {
 
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem("profile"))
-    setId(user.result._id)
+    setId(user.result?._id)
     // if (user.result.restaurantUser) {
     //   setRestaurant({
     //     restaurant_name: user.result.restaurantUser.restaurant_name,
@@ -107,20 +107,6 @@ function Restaurantinfo() {
 
           <div className="w-fit flex space-x-1">
             <div className="flex flex-col">
-              <label>Ville</label>
-              <input
-                className="bg-gray-300 my-1 md:mb-3 w-20 rounded py-2 px-2"
-                name="ville"
-                placeholder="Ville"
-                onChange={e =>
-                  setRestaurant({
-                    ...restaurant,
-                    ville: e.target.value,
-                  })
-                }
-              />
-            </div>
-            <div className="flex flex-col">
               <label>Code Postal</label>
               <input
                 className="bg-gray-300 my-1 md:mb-3 w-40 rounded py-2 px-2"
@@ -130,6 +116,20 @@ function Restaurantinfo() {
                   setRestaurant({
                     ...restaurant,
                     codepostal: e.target.value,
+                  })
+                }
+              />
+            </div>
+            <div className="flex flex-col">
+              <label>Ville</label>
+              <input
+                className="bg-gray-300 my-1 md:mb-3 w-20 rounded py-2 px-2"
+                name="ville"
+                placeholder="Ville"
+                onChange={e =>
+                  setRestaurant({
+                    ...restaurant,
+                    ville: e.target.value,
                   })
                 }
               />

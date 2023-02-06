@@ -3,7 +3,7 @@ export const createRestaurant = (restaurant, id, history) => async dispatch => {
   try {
     const { data } = await api.createRestaurant(restaurant, id)
     console.log(data)
-    dispatch({ type: "AUTHRESTAURANT", payload: data })
+    dispatch({ type: "AUTH", data })
     history.push("/plats")
   } catch (error) {
     console.log(error)

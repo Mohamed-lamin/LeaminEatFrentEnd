@@ -23,7 +23,7 @@ function RestaurantPlats({
         <div
           key={plat._id}
           className={`w-50 md:w-60 rounded ${
-            platCurrentId
+            platCurrentId === plat._id
               ? " border-orange-400 border-solid border-4 "
               : " border-transparent"
           }`}
