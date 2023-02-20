@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from "react"
-
+import imageEAT from "../../images/waitingImage.png"
 function TypeWriter({ theText }) {
   console.log(theText)
   const [text, setText] = useState("")
@@ -15,15 +15,11 @@ function TypeWriter({ theText }) {
     setText("")
   }, [theText])
   return (
-    <div className="bg-orange-500  absolute bottom-0 top-20 left-20 right-20 flex justify-center items-center">
+    <div className="bg-orange-500  absolute bottom-0 top-20 left-20 right-20 flex justify-center flex-col space-y-10 items-center rounded-lg">
       <div>
         <h1 className="text-3xl text-white font-extrabold">{text}</h1>
-        <img
-          className="w-20 h-20"
-          alt=""
-          src={"../../images/waitingImage.png"}
-        />
       </div>
+      <img className="w-40 h-40 rounded" alt="" src={imageEAT} />
     </div>
   )
 }

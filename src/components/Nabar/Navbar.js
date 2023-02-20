@@ -8,7 +8,10 @@ import Avatar from "react-avatar"
 import FileBase from "react-file-base64"
 import { UpdateCatList, updateRestaurant } from "../../actions/Restaurant"
 import restaurant from "../../reducers/restaurant"
-import { ChevronDownIcon } from "@heroicons/react/24/solid"
+import {
+  ChevronDownIcon,
+  AdjustmentsVerticalIcon,
+} from "@heroicons/react/24/solid"
 import commands from "../../reducers/commands"
 import { getCategories } from "../../actions/PostsResaurantPlats"
 
@@ -88,16 +91,27 @@ function Navbar() {
     // )
   }, [location])
   const addToPartenaire = () => {
-    dispatch(UpdateCatList(restaurantId, { listName: "Séléction" }))
+    dispatch(
+      UpdateCatList(user.result.restaurantUser._id, { listName: "Séléction" })
+    )
     setPartenaire(false)
+    setSettings(false)
   }
   const addToReduction = () => {
-    dispatch(UpdateCatList(restaurantId, { listName: "Réduction" }))
+    dispatch(
+      UpdateCatList(user.result.restaurantUser._id, { listName: "Réduction" })
+    )
     setReduction(false)
+    setSettings(false)
   }
   const addToOffre = () => {
-    dispatch(UpdateCatList(restaurantId, { listName: "Offres à coté" }))
+    dispatch(
+      UpdateCatList(user.result.restaurantUser._id, {
+        listName: "Offres à coté",
+      })
+    )
     setOffre(false)
+    setSettings(false)
   }
 
   console.log(allCommands)
@@ -151,22 +165,17 @@ function Navbar() {
                   : user.result.restaurantUser?.restaurant_name}
               </h1>
               {user?.result.restaurantUser && (
-                <button
-                  className={`bg-black text-sm p-0.5
-       
-       
-    text-white font-semibold shadow rounded w-18 text-center`}
+                <AdjustmentsVerticalIcon
                   onClick={() => setSettings(!settings)}
-                >
-                  paramétres
-                </button>
+                  className="w-10 cursor-pointer"
+                />
               )}
             </div>
           )}
         </div>
       </div>
       {settings && (
-        <div className="flex justify-end mx-30 absolute z-50 w-4/5 ml-20">
+        <div className="flex justify-end mx-30 absolute z-50 w-11/12 ml-19">
           <div className="bg-black rounded-b text-white w-1/6 flex flex-col items-center mb-4  ">
             <button
               onClick={() => setPartenaire(!partenaire)}
