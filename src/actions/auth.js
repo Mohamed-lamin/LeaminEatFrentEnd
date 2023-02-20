@@ -14,17 +14,14 @@ export const signin = (form, history, setShowWaiting) => async dispatch => {
     setShowWaiting(false)
   }
 }
-export const signup = (form, history, setShowWaiting) => async dispatch => {
+export const signup = (form, history) => async dispatch => {
   try {
-    setShowWaiting(true)
     const { data } = await api.signUn(form)
     dispatch({ type: "AUTH", data })
     history.push("/restaurantinfo")
-    setShowWaiting(false)
   } catch (error) {
     const data = error.response.data
     dispatch({ type: "ERROR", data })
     console.log(error.response.data)
-    setShowWaiting(false)
   }
 }

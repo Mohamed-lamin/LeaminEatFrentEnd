@@ -43,7 +43,7 @@ function Auth() {
   const handleSubmitSignUp = e => {
     e.preventDefault()
 
-    dispatch(signup(form, history))
+    dispatch(signup(form, history, setShowWaiting))
   }
   // handle google responses
   // const googleSuccess = async res => {
@@ -52,17 +52,16 @@ function Auth() {
   // const googleFailure = error => {
   //   console.log(error)
   // }
+  const isAuth = JSON.parse(localStorage.getItem("profile"))
   useEffect(() => {
-    let isAuth = JSON.parse(localStorage.getItem("profile"))
-    console.log(isAuth)
-    if (isAuth && !isAuth?.result?.restaurantUser) {
-      history.push("/restaurantinfo")
-    } else if (isAuth && isAuth?.result?.restaurantUser) {
+    if (isAuth && isAuth?.result?.restaurantId) {
       history.push("/plats")
+    } else if (isAuth && !isAuth?.result?.restaurantI) {
+      history.push("/restaurantinfo")
     } else {
       history.push("/")
     }
-  }, [])
+  }, [history, isAuth])
   // function handleCallbackResponse(res) {
   //   const token = res.credential
   //   const result = jwt_decode(res.credential)

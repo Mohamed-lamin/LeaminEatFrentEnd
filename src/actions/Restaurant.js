@@ -3,8 +3,17 @@ export const createRestaurant = (restaurant, id, history) => async dispatch => {
   try {
     const { data } = await api.createRestaurant(restaurant, id)
     console.log(data)
-    dispatch({ type: "AUTH", data })
+    dispatch({ type: "AUTHRESTAURANT", data })
     history.push("/plats")
+  } catch (error) {
+    console.log(error)
+  }
+}
+export const getTheRestaurant = restaurantId => async dispatch => {
+  try {
+    const { data } = await api.getTheRestaurant(restaurantId)
+    console.log(data)
+    dispatch({ type: "AUTHRESTAURANT", data })
   } catch (error) {
     console.log(error)
   }

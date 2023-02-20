@@ -35,7 +35,7 @@ function Navbar() {
   )
   // udating Restaurant
   const categories = useSelector(state => state.categories)
-  console.log(categories)
+
   const initial = {
     restaurant_name: "",
     description: "",
@@ -53,7 +53,7 @@ function Navbar() {
 
   const [restaurant, setRestaurant] = useState(initial)
   const [updateRetaurant, setUpdateRestaurant] = useState(false)
-  const restaurantInfo = useSelector(state => state.auth)
+  const restaurantInfo = useSelector(state => state.restaurant)
 
   const handleSumbit = e => {
     e.preventDefault()
@@ -62,7 +62,7 @@ function Navbar() {
     setUpdateRestaurant(false)
   }
   const modifierRestaurant = () => {
-    setRestaurant(user.result.restaurantUser)
+    setRestaurant(restaurantinfo)
     setUpdateRestaurant(true)
     setSettings(false)
     dispatch(getCategories())
@@ -114,7 +114,6 @@ function Navbar() {
     setSettings(false)
   }
 
-  console.log(allCommands)
   return (
     <>
       <div
@@ -132,7 +131,7 @@ function Navbar() {
             src={imageEAT}
           />
         </div>
-        {user?.result.restaurantUser && (
+        {restaurantInfo && (
           <div>
             <ChevronDownIcon
               onClick={() => setShowCommands(!showCommands)}
@@ -151,20 +150,20 @@ function Navbar() {
                 name={
                   location.pathname === "/restaurantinfo"
                     ? user.result.name
-                    : user.result.restaurantUser?.restaurant_name
+                    : restaurantInfo?.restaurant_name
                 }
                 src={
                   location.pathname === "/restaurantinfo"
                     ? ""
-                    : user.result.restaurantUser?.image
+                    : restaurantinfo?.image
                 }
               />
               <h1>
                 {location.pathname === "/restaurantinfo"
                   ? user.result.name
-                  : user.result.restaurantUser?.restaurant_name}
+                  : restaurantInfo?.restaurant_name}
               </h1>
-              {user?.result.restaurantUser && (
+              {restaurantInfo && (
                 <AdjustmentsVerticalIcon
                   onClick={() => setSettings(!settings)}
                   className="w-10 cursor-pointer"

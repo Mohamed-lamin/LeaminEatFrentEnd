@@ -9,17 +9,15 @@ function RestaurantPlats({
   restaurantId,
 }) {
   const Plats = useSelector(state => state.plats)
-  console.log(restaurantId)
+  console.log(Plats)
 
   const user = JSON.parse(localStorage.getItem("profile"))
-  if (!user) {
-    return <h1>""</h1>
-  }
+
   return !Plats ? (
     <h1 className="text-white">Téléchargement...</h1>
   ) : (
     <div className="flex flex-wrap justify-start space-x-2">
-      {Plats.map((plat, index) => (
+      {Plats?.map((plat, index) => (
         <div
           key={plat._id}
           className={`w-50 md:w-60 rounded ${

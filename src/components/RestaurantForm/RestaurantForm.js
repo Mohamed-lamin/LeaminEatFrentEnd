@@ -8,8 +8,9 @@ import {
   updatePlat,
 } from "../../actions/PostsResaurantPlats"
 
-function RestaurantForm({ restaurantId, setPlatCurrentId, platCurrentId }) {
+function RestaurantForm({ setPlatCurrentId, platCurrentId }) {
   console.log(platCurrentId)
+  const restaurantId = useSelector(state => state.restaurant?._id)
   const plat = useSelector(state =>
     platCurrentId ? state.plats?.find(plat => plat._id === platCurrentId) : null
   )
@@ -17,6 +18,7 @@ function RestaurantForm({ restaurantId, setPlatCurrentId, platCurrentId }) {
   const [postData, setPostData] = useState({
     dishname: "",
     price: "",
+    categorie: "",
     description: "",
     image: "",
   })
@@ -43,19 +45,28 @@ function RestaurantForm({ restaurantId, setPlatCurrentId, platCurrentId }) {
     e.preventDefault()
     if (platCurrentId === 0) {
       dispatch(createResaurantPlats(postData, restaurantId))
-      // dispatch(category(postData))
-      clear()
     } else {
       dispatch(updatePlat(restaurantId, postData))
-      clear()
+      setPlatCurrentId(0)
     }
+    setPostData({
+      dishname: "",
+      price: "",
+      categorie: "",
+      description: "",
+      image: "",
+    })
   }
   useEffect(() => {
     dispatch(getRestaurantPlats(restaurantId))
   }, [dispatch])
   return (
-    <div className="container mx-auto ">
-      <form className="flex flex-col h-1/2 items-center  mt-2 md:mt-10">
+    <div className="container mx-auto  rounded">
+      <form
+        className={`flex flex-col h-1/2 items-center ${
+          platCurrentId ? "bg-orange-500 mt-0" : ""
+        }rounded `}
+      >
         <h2 className="text-xl font-bold">{`${
           platCurrentId ? "Mettre à jour" : "Ajouter un plat"
         }`}</h2>

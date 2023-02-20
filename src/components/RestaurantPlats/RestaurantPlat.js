@@ -1,17 +1,17 @@
 import React, { useState } from "react"
 import { EllipsisHorizontalIcon, TrashIcon } from "@heroicons/react/24/solid"
 import { deletePlat } from "../../actions/PostsResaurantPlats"
-import { useDispatch } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
 
 function RestaurantPlat({
   plat,
   setCurrentId,
   setPlatCurrentId,
-  restaurantId,
+
   platcurrentId,
 }) {
   const Dispatch = useDispatch()
-
+  const restaurantId = useSelector(state => state.restaurant?._id)
   // const [restaurantID, setResaurantID] = useState(
   //   JSON.parse(localStorage.getItem("profile")).result?.restaurantUser?._id
   // )
@@ -19,7 +19,7 @@ function RestaurantPlat({
   return (
     <div className="flex bg-white flex-col h-fit justify-center  items-center rounded-md my-2">
       <EllipsisHorizontalIcon
-        onClick={() => setPlatCurrentId(plat._id)}
+        onClick={() => setPlatCurrentId(plat?._id)}
         className={`h-6 absolute z-30 w-10  flex mb-52 ml-40 cursor-pointer bg-white rounded`}
       />
       <img
@@ -37,7 +37,7 @@ function RestaurantPlat({
         <TrashIcon
           className="h-6 mb-2 mr-5 cursor-pointer"
           onClick={() =>
-            Dispatch(deletePlat(restaurantId, { PlatId: plat._id }))
+            Dispatch(deletePlat(restaurantId, { PlatId: plat?._id }))
           }
         />
       </div>

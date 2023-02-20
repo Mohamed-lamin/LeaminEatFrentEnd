@@ -1,7 +1,7 @@
 import axios from "axios"
 
-const url = "https://lamineatbackend-lamineat.onrender.com"
-// const url = "http://localhost:5000"
+// const url = "https://lamineatbackend-lamineat.onrender.com"
+const url = "http://localhost:5000"
 const API = axios.create({
   baseURL: url,
 })
@@ -27,6 +27,8 @@ export const updatePlat = (restaurantId, form) =>
 //CreateRestaurant
 export const createRestaurant = (restaurant, userId) =>
   API.post(`/restaurant/${userId}`, restaurant)
+export const getTheRestaurant = restaurantId =>
+  API.post(`/restaurantuser/${restaurantId}`)
 // UpdateRestaurant
 export const updateRestaurant = restaurant =>
   API.post(`/restaurant`, restaurant)

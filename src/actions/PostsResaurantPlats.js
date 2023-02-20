@@ -1,6 +1,7 @@
 import * as api from "../api"
 
 export const getRestaurantPlats = restaurantId => async dispatch => {
+  console.log(restaurantId)
   try {
     const { data } = await api.fetchPlats(restaurantId)
     console.log(data)

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
-import { getAllRestaurant } from "../../actions/Restaurant"
+import { getAllRestaurant, getTheRestaurant } from "../../actions/Restaurant"
 import {
   commands,
   deletePlat,
@@ -18,26 +18,30 @@ function Plats() {
   const [restaurantId, setResaurantId] = useState()
   const [currentId, setCurrentId] = useState({ PlatId: "" })
   const [platCurrentId, setPlatCurrentId] = useState(0)
-  console.log(restaurantId)
 
   const dispatch = useDispatch()
-
   useEffect(() => {
-    dispatch(getRestaurantPlats(restaurantId))
-    dispatch(commands(restaurantId))
-  }, [dispatch, restaurantId, currentId])
+    dispatch(getTheRestaurant(user.result.restaurantId))
+  }, [])
+  useEffect(() => {
+    dispatch(getRestaurantPlats(restaurantID?._id))
+    dispatch(commands(restaurantID?._id))
+  }, [dispatch, restaurantID])
+  // useEffect(() => {
+
+  // }, [])
+  // setTimeout(() => dispatch(commands(restaurantID._id)), 5000)
   // useEffect(() => {
   //   dispatch(deletePlat(restaurantId, currentId))
   //   console.log(currentId)
   // }, [currentId, dispatch, restaurantId])
   useEffect(() => {
-    restaurantID
-      ? setResaurantId(restaurantID?.restaurantUser._id)
-      : setResaurantId(user?.result?.restaurantUser?._id)
+    // restaurantID
+    // ?
+    setResaurantId(restaurantID?._id)
+    // : setResaurantId(user?.result?.restaurantUser?._id)
   }, [restaurantId, user])
-  useEffect(() => {
-    dispatch(getRestaurantPlats(restaurantId))
-  }, [restaurantId, dispatch])
+
   useEffect(() => {
     let isAuth = JSON.parse(localStorage.getItem("profile"))
 
