@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react"
-import { useDispatch } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
 import FileBase from "react-file-base64"
 import { createRestaurant } from "../../actions/Restaurant"
 import { useHistory } from "react-router-dom"
+import { getCategories } from "../../actions/PostsResaurantPlats"
 
 function Restaurantinfo() {
+  const categories = useSelector(state => state.categories)
   const initial = {
     restaurant_name: "",
     description: "",
@@ -42,6 +44,9 @@ function Restaurantinfo() {
     e.preventDefault()
     dispatch(createRestaurant(restaurant, id, history))
   }
+  useEffect(() => {
+    dispatch(getCategories())
+  }, [])
 
   return (
     <div className="container mx-auto flex justify-center items-start ">
@@ -49,10 +54,10 @@ function Restaurantinfo() {
         <h2 className="text-xl mt-5 font-bold">
           Entrer les informations de votre restaurant
         </h2>
-        <div className="flex flex-col mt-5">
+        <div className="flex flex-col w-96 mt-5">
           <label>Nom du restaurant</label>
           <input
-            className="bg-gray-300 my-1 md:mb-3 w-60 rounded py-2 px-2"
+            className="bg-gray-300 my-1 md:mb-3 w-60 md:w-full rounded py-2 px-2"
             placeholder="Nom du restaurant"
             name="restaurant_name"
             value={restaurant.restaurant_name}
@@ -72,12 +77,12 @@ function Restaurantinfo() {
             setRestaurant({ ...restaurant, address: e.target.value })
           }
         /> */}
-        <div className="flex flex-col">
-          <div className="w-fit flex space-x-1">
-            <div className="flex flex-col">
+        <div className="flex flex-col w-96">
+          <div className="w-full flex space-x-1">
+            <div className="flex w-20 flex-col ">
               <label>N°</label>
               <input
-                className="bg-gray-300 my-1 md:mb-3 w-10 rounded py-2 px-2"
+                className="bg-gray-300 my-1 md:mb-3 w-full rounded py-2 px-2"
                 name="numero"
                 placeholder="N°"
                 type="number"
@@ -89,10 +94,10 @@ function Restaurantinfo() {
                 }
               />
             </div>
-            <div className="flex flex-col">
+            <div className="flex flex-col w-80">
               <label>Rue</label>
               <input
-                className="bg-gray-300 my-1 md:mb-3 w-50 rounded py-2 px-2"
+                className="bg-gray-300 my-1 md:mb-3  w-full  rounded py-2 px-2"
                 name="rue"
                 placeholder="Rue"
                 onChange={e =>
@@ -105,11 +110,11 @@ function Restaurantinfo() {
             </div>
           </div>
 
-          <div className="w-fit flex space-x-1">
-            <div className="flex flex-col">
+          <div className="w-96 flex space-x-1">
+            <div className="flex flex-col w-25 ">
               <label>Code Postal</label>
               <input
-                className="bg-gray-300 my-1 md:mb-3 w-40 rounded py-2 px-2"
+                className="bg-gray-300 my-1 md:mb-3 w-full rounded py-2 px-2"
                 name="codepostal"
                 Placeholder="Code Postal"
                 onChange={e =>
@@ -120,10 +125,10 @@ function Restaurantinfo() {
                 }
               />
             </div>
-            <div className="flex flex-col">
+            <div className="flex flex-col w-80">
               <label>Ville</label>
               <input
-                className="bg-gray-300 my-1 md:mb-3 w-20 rounded py-2 px-2"
+                className="bg-gray-300 my-1 md:mb-3 w-full rounded py-2 px-2"
                 name="ville"
                 placeholder="Ville"
                 onChange={e =>
@@ -136,10 +141,10 @@ function Restaurantinfo() {
             </div>
           </div>
         </div>
-        <div className="flex flex-col">
+        <div className="flex flex-col w-96">
           <label>Description</label>
           <textarea
-            className="bg-gray-300 mb-5 md:mb-3 mt-2 w-60 rounded py-2 px-2"
+            className="bg-gray-300 mb-5 md:mb-3 mt-2 w-full rounded py-2 px-2"
             name="description"
             rows={3}
             placeholder="Description"
@@ -161,13 +166,16 @@ function Restaurantinfo() {
             setRestaurant({ ...restaurant, category_name: e.target.value })
           }
         >
-          <option value="traditional">Traditionel</option>
-          <option value="local">Local</option>
+          {categories.map(category => (
+            <option value={category._id}>{category.category_name}</option>
+          ))}
+
+          {/* <option value="local">Local</option>
           <option value="americain">Americain</option>
           <option value="italien">Italien</option>
           <option value="japanais">Japanais</option>
           <option value="lebanaise">Lebanaise</option>
-          <option value="chinois">Chinois</option>
+          <option value="chinois">Chinois</option> */}
         </select>
 
         <div className="text-black">
@@ -181,11 +189,18 @@ function Restaurantinfo() {
           />
         </div>
         <button
-          className="my-2 md:my-5 py-1 border-solid border-2 bg-black w-1/5  text-white font-bold rounded-md "
+          className=" mt-3 py-1 border-solid border-2 bg-black w-1/5  text-white font-bold rounded-md "
           type="submit"
           onClick={handleSumbit}
         >
           Enregistrer
+        </button>
+        <button
+          className="my-2 md:my-2 py-1 border-solid border-2 bg-black w-1/5  text-white font-bold rounded-md "
+          type="submit"
+          onClick={() => history.goBack()}
+        >
+          Annuler
         </button>
       </form>
     </div>

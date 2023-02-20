@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react"
 import FileBase from "react-file-base64"
 import { useDispatch, useSelector } from "react-redux"
 import {
+  // category,
   createResaurantPlats,
   getRestaurantPlats,
   updatePlat,
@@ -27,6 +28,7 @@ function RestaurantForm({ restaurantId, setPlatCurrentId, platCurrentId }) {
     setPostData({
       dishname: "",
       price: "",
+      categorie: "",
       description: "",
       image: "",
     })
@@ -41,6 +43,7 @@ function RestaurantForm({ restaurantId, setPlatCurrentId, platCurrentId }) {
     e.preventDefault()
     if (platCurrentId === 0) {
       dispatch(createResaurantPlats(postData, restaurantId))
+      // dispatch(category(postData))
       clear()
     } else {
       dispatch(updatePlat(restaurantId, postData))
@@ -78,6 +81,18 @@ function RestaurantForm({ restaurantId, setPlatCurrentId, platCurrentId }) {
             type="number"
             value={postData.price}
             onChange={e => setPostData({ ...postData, price: e.target.value })}
+          />
+        </div>
+        <div className="flex flex-col">
+          <label>Categorie</label>
+          <input
+            className="bg-gray-300 my-2 md:mb-2 w-60 rounded py-2 px-2"
+            placeholder="Le categorie"
+            name="categorie"
+            value={postData.categorie}
+            onChange={e =>
+              setPostData({ ...postData, categorie: e.target.value })
+            }
           />
         </div>
         <div className="flex flex-col">

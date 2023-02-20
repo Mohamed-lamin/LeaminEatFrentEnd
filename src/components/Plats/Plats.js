@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { getAllRestaurant } from "../../actions/Restaurant"
 import {
+  commands,
   deletePlat,
   getRestaurantPlats,
 } from "../../actions/PostsResaurantPlats"
@@ -23,6 +24,7 @@ function Plats() {
 
   useEffect(() => {
     dispatch(getRestaurantPlats(restaurantId))
+    dispatch(commands(restaurantId))
   }, [dispatch, restaurantId, currentId])
   // useEffect(() => {
   //   dispatch(deletePlat(restaurantId, currentId))

@@ -27,6 +27,9 @@ export const updatePlat = (restaurantId, form) =>
 //CreateRestaurant
 export const createRestaurant = (restaurant, userId) =>
   API.post(`/restaurant/${userId}`, restaurant)
+// UpdateRestaurant
+export const updateRestaurant = restaurant =>
+  API.post(`/restaurant`, restaurant)
 
 export const AllAboutRestaurant = () => API.get(`plats/restaurants`)
 
@@ -39,3 +42,9 @@ export const signUn = form => API.post(`/signup`, form)
 
 export const UpdateCatList = (restaurantId, cat) =>
   API.post(`/type/${restaurantId}`, cat)
+// commands
+export const fetchCommands = restaurantId =>
+  API.get(`/commands/${restaurantId}`)
+// CreateCatego
+export const createCatego = Post => API.post(`/category`, Post)
+export const getCategory = () => API.get(`/category`)

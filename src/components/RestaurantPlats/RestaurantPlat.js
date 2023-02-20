@@ -20,17 +20,17 @@ function RestaurantPlat({
     <div className="flex bg-white flex-col h-fit justify-center  items-center rounded-md my-2">
       <EllipsisHorizontalIcon
         onClick={() => setPlatCurrentId(plat._id)}
-        className={`h-8 absolute z-50 w-10 flex mb-52 ml-40 cursor-pointer bg-white rounded`}
+        className={`h-6 absolute z-30 w-10  flex mb-52 ml-40 cursor-pointer bg-white rounded`}
       />
       <img
-        className="h-20  md:h-40 w-full rounded-md relative"
+        className="h-20  md:h-40 w-full rounded-t-md relative"
         alt="a"
         src={plat.image}
       />
 
       <div className="flex justify-start w-full flex-col ml-5 ">
         <h1 className="text-xl font-bold">{plat.dishname}</h1>
-        <h1 className="text-xl font-bold">{plat.price}</h1>
+        <h1 className="text-xl font-bold">{plat.price} Euro</h1>
         <p>{plat.description}</p>
       </div>
       <div className="w-full flex justify-end">

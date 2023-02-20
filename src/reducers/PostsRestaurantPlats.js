@@ -3,6 +3,8 @@ export default (state = [], action) => {
   switch (action.type) {
     case "FETCHALL":
       return action.payload
+    case "FETCHCOMMAND":
+      return action.payload
 
     case "CREATE":
       return [...state, action.payload]

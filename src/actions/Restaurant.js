@@ -9,6 +9,17 @@ export const createRestaurant = (restaurant, id, history) => async dispatch => {
     console.log(error)
   }
 }
+export const updateRestaurant = (restaurant, history) => async dispatch => {
+  console.log(restaurant)
+  try {
+    const { data } = await api.updateRestaurant(restaurant)
+    console.log(data)
+    dispatch({ type: "AUTH", data })
+    history.push("/plats")
+  } catch (error) {
+    console.log(error)
+  }
+}
 export const UpdateCatList = (restaurantId, cat) => async dispatch => {
   try {
     const { data } = await api.UpdateCatList(restaurantId, cat)

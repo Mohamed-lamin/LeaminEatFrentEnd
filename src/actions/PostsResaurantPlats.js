@@ -37,3 +37,33 @@ export const updatePlat = (restaurantId, form) => async dispatch => {
     console.log(error.message)
   }
 }
+
+// get the restaurant's commands
+
+export const commands = restaurantId => async dispatch => {
+  try {
+    const { data } = await api.fetchCommands(restaurantId)
+    console.log(data)
+    dispatch({ type: "FETCHCOMMAND", payload: data })
+  } catch (error) {
+    console.log(error)
+  }
+}
+// export const category = Post => async dispatch => {
+//   try {
+//     const { data } = await api.createCatego(Post)
+//     console.log(data)
+//     // dispatch({ type: "FETCHCOMMAND", payload: data })
+//   } catch (error) {
+//     console.log(error)
+//   }
+// }
+export const getCategories = () => async dispatch => {
+  try {
+    const { data } = await api.getCategory()
+    console.log(data)
+    dispatch({ type: "FETCHCATEGORIES", payload: data })
+  } catch (error) {
+    console.log(error)
+  }
+}
