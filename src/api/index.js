@@ -19,8 +19,8 @@ export const fetchPlats = restaurantId =>
   API.get(`/restaurant/plats/${restaurantId}`)
 export const createPlat = (newPlatPost, restaurantId) =>
   API.post(`/restaurant/plats/${restaurantId}`, newPlatPost)
-export const deletePlat = (restaurantId, currentId) =>
-  API.post(`/restaurant/deleteplat/${restaurantId}`, currentId)
+export const deletePlat = currentId =>
+  API.delete(`/restaurant/deleteplat/${currentId}`)
 export const updatePlat = (restaurantId, form) =>
   API.patch(`/restaurant/updateplat/${restaurantId}`, form)
 
@@ -28,7 +28,7 @@ export const updatePlat = (restaurantId, form) =>
 export const createRestaurant = (restaurant, userId) =>
   API.post(`/restaurant/${userId}`, restaurant)
 export const getTheRestaurant = restaurantId =>
-  API.post(`/restaurantuser/${restaurantId}`)
+  API.get(`/restaurantuser/${restaurantId}`)
 // UpdateRestaurant
 export const updateRestaurant = restaurant =>
   API.post(`/restaurant`, restaurant)
@@ -39,7 +39,7 @@ export const AllAboutRestaurant = () => API.get(`plats/restaurants`)
 
 export const signIn = form => API.post(`/signin`, form)
 export const signUn = form => API.post(`/signup`, form)
-
+export const ajouterServeur = serverForm => API.post(`/serveur`, serverForm)
 // Update CatList
 
 export const UpdateCatList = (restaurantId, cat) =>

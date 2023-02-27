@@ -30,15 +30,13 @@ function RestaurantPlat({
 
       <div className="flex justify-start w-full flex-col ml-5 ">
         <h1 className="text-xl font-bold">{plat.dishname}</h1>
-        <h1 className="text-xl font-bold">{plat.price} Euro</h1>
+        <h1 className="text-xl font-bold">{plat.price} €</h1>
         <p>{plat.description}</p>
       </div>
       <div className="w-full flex justify-end">
         <TrashIcon
           className="h-6 mb-2 mr-5 cursor-pointer"
-          onClick={() =>
-            Dispatch(deletePlat(restaurantId, { PlatId: plat?._id }))
-          }
+          onClick={() => Dispatch(deletePlat(plat?._id))}
         />
       </div>
     </div>

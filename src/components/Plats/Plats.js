@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
-import { getAllRestaurant, getTheRestaurant } from "../../actions/Restaurant"
+import { getTheRestaurant } from "../../actions/Restaurant"
 import {
   commands,
   deletePlat,
@@ -21,12 +21,13 @@ function Plats() {
 
   const dispatch = useDispatch()
   useEffect(() => {
-    dispatch(getTheRestaurant(user.result.restaurantId))
-  }, [])
+    console.log(user)
+    dispatch(getTheRestaurant(user?.result.restaurantId))
+  }, [dispatch])
   useEffect(() => {
     dispatch(getRestaurantPlats(restaurantID?._id))
-    dispatch(commands(restaurantID?._id))
   }, [dispatch, restaurantID])
+
   // useEffect(() => {
 
   // }, [])
@@ -44,11 +45,13 @@ function Plats() {
 
   useEffect(() => {
     let isAuth = JSON.parse(localStorage.getItem("profile"))
-
     if (!isAuth) {
       history.push("/")
+    } else if (isAuth.result.role === "Serveur") {
+      history.push("/commandes")
     }
   }, [location])
+
   return (
     <div className="container mx-auto  ">
       <div className="container  flex flex-col-reverse md:flex-row md:justify-between items-center md:items-stretch space-x-5 ">

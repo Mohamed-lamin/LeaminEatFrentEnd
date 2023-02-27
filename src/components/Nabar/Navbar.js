@@ -7,14 +7,21 @@ import decode from "jwt-decode"
 import Avatar from "react-avatar"
 import FileBase from "react-file-base64"
 import { UpdateCatList, updateRestaurant } from "../../actions/Restaurant"
-import restaurant from "../../reducers/restaurant"
+
 import {
   ChevronDownIcon,
   AdjustmentsVerticalIcon,
 } from "@heroicons/react/24/solid"
-import commands from "../../reducers/commands"
 import { getCategories } from "../../actions/PostsResaurantPlats"
-
+import { commands } from "../../actions/commands"
+import { ajouterServeur } from "../../actions/auth"
+const initialState = {
+  firstname: "",
+  lastname: "",
+  email: "",
+  password: "",
+  confirmpassword: "",
+}
 function Navbar() {
   const history = useHistory()
   const location = useLocation()
@@ -22,18 +29,26 @@ function Navbar() {
   const [showCommands, setShowCommands] = useState(false)
   const [showOneCommand, setShowOneCommand] = useState("")
   const [user, setUser] = useState(JSON.parse(localStorage.getItem("profile")))
-  const allCommands = useSelector(state => state.commands)
+  const restaurantID = useSelector(state => state?.restaurant?._id)
   const [settings, setSettings] = useState(false)
   const [partenaire, setPartenaire] = useState(false)
   const [reduction, setReduction] = useState(false)
+  const [serveur, setServeur] = useState(false)
+  const [serveurAdded, setServeurAdded] = useState("")
   const [offre, setOffre] = useState(false)
-  const restaurantinfo = useSelector(state => state.restaurant)
-  console.log(restaurantinfo)
-  const restaurantId = user?.restaurantUser?._id
-  const [restaurantBar, setRestaurantBar] = useState(
-    JSON.parse(localStorage.getItem("profile"))?.restaurantUser
-  )
+  const [form, setForm] = useState(initialState)
+  const restaurantInfo = useSelector(state => state.restaurant)
+  const restaurantCommands = useSelector(state => state.commands)
+  const goToCommand = () => {
+    if (location.pathname === "/plats") {
+      history.push("/commandes")
+    } else {
+      history.goBack()
+    }
+    dispatch(commands(restaurantID))
+  }
   // udating Restaurant
+
   const categories = useSelector(state => state.categories)
 
   const initial = {
@@ -50,26 +65,55 @@ function Navbar() {
     category_name: "",
     id: "",
   }
+  // Ajouter un serveur
+  const handleChange = e => {
+    setForm({ ...form, [e.target.name]: e.target.value })
+  }
+  useEffect(() => {
+    setInterval(() => setServeurAdded(""), 5000)
+  }, [serveurAdded])
+  const handleSubmitServeur = e => {
+    e.preventDefault()
 
+    dispatch(
+      ajouterServeur(
+        { ...form, restaurantId: restaurantInfo?._id },
+        setServeur,
+        setServeurAdded
+      )
+    )
+  }
+  // ----------------------------------------------
   const [restaurant, setRestaurant] = useState(initial)
   const [updateRetaurant, setUpdateRestaurant] = useState(false)
-  const restaurantInfo = useSelector(state => state.restaurant)
 
+  // Dispatch Commandes
+  // useEffect(() => {
+  //   const interval = setInterval(
+  //     () => dispatch(commands(restaurantInfo._id)),
+  //     5000
+  //   )
+
+  //   return () => clearInterval(interval)
+  // }, [])
+  // -----------------------------
   const handleSumbit = e => {
     e.preventDefault()
     dispatch(updateRestaurant({ ...restaurant, id: user.result._id }, history))
     setRestaurant(initial)
     setUpdateRestaurant(false)
   }
+  console.log(restaurantInfo)
   const modifierRestaurant = () => {
-    setRestaurant(restaurantinfo)
+    setRestaurant(restaurantInfo)
     setUpdateRestaurant(true)
     setSettings(false)
     dispatch(getCategories())
   }
-  console.log(restaurant)
-  //
-  console.log(user)
+  const addWaiter = () => {
+    setServeur(!serveur)
+    setSettings(false)
+  }
   const logout = () => {
     dispatch({ type: "LOGOUT" })
     dispatch({ type: "LEAVE" })
@@ -91,22 +135,20 @@ function Navbar() {
     // )
   }, [location])
   const addToPartenaire = () => {
-    dispatch(
-      UpdateCatList(user.result.restaurantUser._id, { listName: "Séléction" })
-    )
+    dispatch(UpdateCatList(user.result.restaurantId, { listName: "Séléction" }))
     setPartenaire(false)
     setSettings(false)
   }
   const addToReduction = () => {
     dispatch(
-      UpdateCatList(user.result.restaurantUser._id, { listName: "Réduction" })
+      UpdateCatList(user.result.restaurantId._id, { listName: "Réduction" })
     )
     setReduction(false)
     setSettings(false)
   }
   const addToOffre = () => {
     dispatch(
-      UpdateCatList(user.result.restaurantUser._id, {
+      UpdateCatList(user.result.restaurantId, {
         listName: "Offres à coté",
       })
     )
@@ -132,11 +174,17 @@ function Navbar() {
           />
         </div>
         {restaurantInfo && (
-          <div>
-            <ChevronDownIcon
-              onClick={() => setShowCommands(!showCommands)}
-              className="h-12 w-12 text-orange-500 cursor-pointer"
-            />
+          <div className="flex flex-col items-center">
+            <div
+              className="flex items-center cursor-pointer"
+              onClick={goToCommand}
+            >
+              <h1 className="font-extrabold relative ">Commandes </h1>
+              <div className="w-5 h-5 ml-24 mb-0.5 absolute   bg-orange-500 rounded-full text-center flex items-center justify-center">
+                <span className="">{restaurantCommands.length}</span>
+              </div>
+            </div>
+            <h1>{user?.result?.role}</h1>
           </div>
         )}
 
@@ -155,7 +203,7 @@ function Navbar() {
                 src={
                   location.pathname === "/restaurantinfo"
                     ? ""
-                    : restaurantinfo?.image
+                    : restaurantInfo?.image
                 }
               />
               <h1>
@@ -174,8 +222,14 @@ function Navbar() {
         </div>
       </div>
       {settings && (
-        <div className="flex justify-end mx-30 absolute z-50 w-11/12 ml-19">
+        <div className="flex justify-end mx-30 absolute z-50 w-11/12 ml-19 ">
           <div className="bg-black rounded-b text-white w-1/6 flex flex-col items-center mb-4  ">
+            <button
+              onClick={addWaiter}
+              className="font-bold hover:text-orange-500 hover:underline"
+            >
+              Ajouter un serveur
+            </button>
             <button
               onClick={() => setPartenaire(!partenaire)}
               className="font-bold hover:text-orange-500 hover:underline"
@@ -278,69 +332,7 @@ function Navbar() {
           </div>
         </div>
       )}
-      {showCommands && (
-        <div className="flex justify-center bg-gray-300 rounded ml-6 absolute w-11/12 h-5/6 z-50">
-          <div className=" mt-10 w-4/5 h-16 ">
-            {allCommands.map((item, id) => (
-              <>
-                <div
-                  key={item._id}
-                  className={`bg-black ${
-                    showOneCommand ? "mb-0" : "mb-2"
-                  } h-full flex flex-row-reverse justify-around items-center rounded`}
-                >
-                  <div className="space-x-2  flex justify-end">
-                    <button className="font-bold text-sm p-2  bg-gray-300 rounded">
-                      Accepter
-                    </button>
-                    <button className="text-white font-bold text-sm p-2 bg-orange-500 rounded">
-                      Refuser
-                    </button>
-                  </div>
-                  <div className="mt-2 ">
-                    <h1 className="text-white mt-2">Details</h1>
-                    <ChevronDownIcon
-                      onClick={
-                        !showOneCommand
-                          ? () => setShowOneCommand(item._id)
-                          : () => setShowOneCommand()
-                      }
-                      className="h-8 w-12 text-orange-500 cursor-pointer"
-                    />
-                  </div>
-                  <div className="text-center w-1/6">
-                    <h1 className="text-white">{item.clientName}</h1>
-                  </div>
-                </div>
-                {showOneCommand === item._id && (
-                  <div className="flex justify-center z-50 ">
-                    {item.commandes.map(subItem => (
-                      <div className="bg-orange-500  mb-2 rounded-b text-center w-1/2">
-                        <div className="flex mt-2 flex-row-reverse items-center justify-center mr-10">
-                          <h1 className="text-lg font-semibold">
-                            Nom du plat : {subItem.platName}
-                          </h1>
-                          <img
-                            className=" rounded-full h-16 w-16 p-2 "
-                            src={subItem.PlatImage}
-                            alt=""
-                          />
-                        </div>
 
-                        <h1>Nombre de plats : {subItem.number}</h1>
-                        <h1 className="font-extrabold">
-                          {" "}
-                          Prix total : {subItem.total} Euro
-                        </h1>
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </>
-            ))}
-          </div>
-        </div>
-      )}
       {updateRetaurant && (
         <div className="container rounded bg-transparent  ml-5 z-50 w-11/12 mx-auto flex justify-center items-start absolute ">
           <form className="flex w-1/2 flex-col h-1/2 items-center justify-around mt-2 bg-orange-500 rounded border-2  border-white">
@@ -500,6 +492,80 @@ function Navbar() {
               Annuler
             </button>
           </form>
+        </div>
+      )}
+      {serveur && (
+        <div className="absolute bottom-0 top-20 left-10 right-10 flex justify-center items-center  opacity-75 bg-orange-500 z-50">
+          <div className=" mx-10 md:w-1/2">
+            <form
+              className="flex flex-col h-96 bg-white  w-full items-center  mt-20 rounded"
+              onSubmit={handleSubmitServeur}
+            >
+              <h1 className="font-bold my-3 ">Ajouter un serveur</h1>
+              <input
+                className="bg-gray-300 mb-2  rounded py-2 px-2 w-60 md:w-80 "
+                placeholder="Votre Nom"
+                name="firstname"
+                onChange={handleChange}
+              />
+              <input
+                className="bg-gray-300 mb-2  rounded py-2 px-2 w-60 md:w-80 "
+                placeholder="Votre Prénom"
+                name="lastname"
+                onChange={handleChange}
+              />
+
+              <input
+                className="bg-gray-300 mb-2  rounded py-2 px-2 w-60 md:w-80 "
+                placeholder="Votre adresse email"
+                name="email"
+                type="email"
+                onChange={handleChange}
+              />
+
+              <input
+                className="bg-gray-300 mb-2  rounded py-2 px-2 w-60 md:w-80"
+                placeholder="Mot de passe"
+                name="password"
+                type="password"
+                onChange={handleChange}
+              />
+
+              <input
+                className="bg-gray-300   rounded py-2 px-2 w-60 md:w-80"
+                placeholder="Confirmer mot de passe"
+                name="confirmPassword"
+                type="password"
+                onChange={handleChange}
+              />
+              {/* {error?.message === "utilisateur existe déja" && (
+              <div className="text-red">
+                <h1 className="text-red-500">{error?.message}</h1>
+              </div>
+            )} */}
+              <button
+                className=" mt-5 w-60 md:w-80 py-0.5 border-solid border-2 bg-black  hover:bg-gray-900 text-white font-bold rounded-md "
+                type="submit"
+              >
+                Ajouter
+              </button>
+              <button
+                className=" mt-2 w-60 md:w-80 py-0.5 border-solid border-2 bg-black  hover:bg-gray-900 text-white font-bold rounded-md "
+                onClick={addWaiter}
+              >
+                Annuler
+              </button>
+            </form>
+          </div>
+        </div>
+      )}
+      {serveurAdded && (
+        <div className="absolute bottom-0 top-20 left-10 right-10 flex justify-center items-center  transparent z-50">
+          <div className=" mx-10 md:w-1/2">
+            <h1 className=" text-white text-3xl font-bold text-center">
+              {serveurAdded.message}
+            </h1>
+          </div>
         </div>
       )}
     </>

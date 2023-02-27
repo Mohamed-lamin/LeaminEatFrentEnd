@@ -3,9 +3,6 @@ export default (state = [], action) => {
   switch (action.type) {
     case "FETCHALL":
       return action.payload
-    case "FETCHCOMMAND":
-      return action.payload
-
     case "CREATE":
       return [...state, action.payload]
     case "UPDATE":
@@ -14,7 +11,7 @@ export default (state = [], action) => {
         plat._id === action.payload._id ? action.payload : plat
       )
     case "DELETE":
-      return state.filter(plat => plat._id !== action.payload._id)
+      return state.filter(plat => plat._id !== action.payload)
 
     default:
       return state

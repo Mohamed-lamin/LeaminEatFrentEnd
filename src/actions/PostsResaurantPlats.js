@@ -20,11 +20,11 @@ export const createResaurantPlats =
       console.log(error)
     }
   }
-export const deletePlat = (restaurantId, currentId) => async dispatch => {
+export const deletePlat = platId => async dispatch => {
   try {
-    const { data } = await api.deletePlat(restaurantId, currentId)
+    const { data } = await api.deletePlat(platId)
     console.log(data)
-    dispatch({ type: "DELETE", payload: data })
+    dispatch({ type: "DELETE", payload: data.id })
   } catch (error) {
     console.log(error)
   }
@@ -41,15 +41,6 @@ export const updatePlat = (restaurantId, form) => async dispatch => {
 
 // get the restaurant's commands
 
-export const commands = restaurantId => async dispatch => {
-  try {
-    const { data } = await api.fetchCommands(restaurantId)
-    console.log(data)
-    dispatch({ type: "FETCHCOMMAND", payload: data })
-  } catch (error) {
-    console.log(error)
-  }
-}
 // export const category = Post => async dispatch => {
 //   try {
 //     const { data } = await api.createCatego(Post)

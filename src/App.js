@@ -11,6 +11,7 @@ import {
 import Auth from "./components/Auth/Auth"
 import Restaurantinfo from "./components/restaurantinfo/Restaurantinfo"
 import { useEffect, useState } from "react"
+import Commands from "./components/Plats/Commands"
 function App() {
   const history = useHistory()
   const [login, setLogin] = useState(localStorage.getItem("profile"))
@@ -23,6 +24,7 @@ function App() {
             <Route path="/" exact component={Auth} />
             <Route path="/plats" exact component={Plats} />
             <Route path="/restaurantinfo" exact component={Restaurantinfo} />
+            <Route path="/commandes" exact component={Commands} />
           </Switch>
         </div>
       </div>
